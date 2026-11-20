@@ -313,6 +313,85 @@ h3 {
   margin: 0 0 22px;
 }
 
+.contact-box {
+  display: grid;
+  grid-template-columns: 0.95fr 1.15fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.contact-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.hp-field {
+  display: none;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-row label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.form-row input,
+.form-row textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.form-row input:focus,
+.form-row textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.form-row textarea {
+  resize: vertical;
+  min-height: 112px;
+}
+
+button.btn {
+  border: none;
+  font-family: inherit;
+}
+
+button.btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.form-status {
+  margin: 12px 0 0;
+  font-size: 0.92rem;
+  min-height: 1.3em;
+}
+
+.form-status.is-success {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.form-status.is-error {
+  color: #9b2c2c;
+}
+
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 32px 0;
@@ -346,7 +425,8 @@ h3 {
   .grid {
     grid-template-columns: 1fr;
   }
-  .format-box {
+  .format-box,
+  .contact-box {
     grid-template-columns: 1fr;
   }
   .detail-row {

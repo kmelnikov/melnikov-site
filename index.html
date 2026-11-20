@@ -8,7 +8,7 @@
   <meta property="og:title" content="Татьяна Мельникова — Психологические консультации онлайн">
   <meta property="og:description" content="Индивидуальные психологические консультации онлайн (60 минут, Google Meet). Выберите удобное время в календаре.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://melnikov.pl/">
+  <meta property="og:url" content="https://psy.melnikov.pl/">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
         <a href="#topics">Запросы</a>
         <a href="#how">Как проходит</a>
         <a href="#format">Формат</a>
-        <a href="#contact">Контакты</a>
+        <a href="#write">Написать</a>
       </nav>
       <a class="btn btn-sm" href="https://calendar.app.google/hi9LgpoJaXUqJCf28" target="_blank" rel="noopener">Записаться</a>
     </div>
@@ -38,8 +38,8 @@
           <a class="btn btn-primary" href="https://calendar.app.google/hi9LgpoJaXUqJCf28" target="_blank" rel="noopener">
             Записаться на консультацию
           </a>
-          <a class="btn btn-secondary" href="mailto:tatiana@melnikov.pl">
-            Написать на почту
+          <a class="btn btn-secondary" href="#write">
+            Написать сообщение
           </a>
         </div>
         <ul class="hero-meta" aria-label="Ключевые детали формата">
@@ -143,11 +143,43 @@
         </div>
         <aside class="cta-card">
           <h3>Готовы выбрать время?</h3>
-          <p>Выберите удобный день и час прямо в онлайн-календаре. Если нужного слота нет — напишите на почту, подберём время индивидуально.</p>
+          <p>Выберите удобный день и час прямо в онлайн-календаре. Если нужного слота нет — напишите ниже, подберём время индивидуально.</p>
           <a class="btn btn-primary btn-block" href="https://calendar.app.google/hi9LgpoJaXUqJCf28" target="_blank" rel="noopener">
             Открыть календарь записи
           </a>
         </aside>
+      </div>
+    </section>
+
+    <section id="write" class="section section-alt">
+      <div class="container contact-box">
+        <div class="contact-copy">
+          <h2>Написать Татьяне</h2>
+          <p class="section-intro">
+            Есть вопрос перед первой встречей или не нашли удобного времени в календаре?
+            Напишите прямо здесь — сообщение придёт на почту <strong>tatiana@melnikov.pl</strong>, и я отвечу на ваш email.
+          </p>
+        </div>
+        <form id="contact-form" class="contact-form" action="https://formsubmit.co/tatiana@melnikov.pl" method="POST">
+          <input type="text" name="_honey" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="hidden" name="_subject" value="Новое сообщение с сайта psy.melnikov.pl">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <div class="form-row">
+            <label for="sender-name">Ваше имя</label>
+            <input id="sender-name" name="name" type="text" required placeholder="Как к вам обращаться">
+          </div>
+          <div class="form-row">
+            <label for="sender-email">Email для ответа</label>
+            <input id="sender-email" name="email" type="email" required placeholder="name@example.com">
+          </div>
+          <div class="form-row">
+            <label for="sender-message">Сообщение</label>
+            <textarea id="sender-message" name="message" rows="4" required placeholder="Коротко напишите ваш вопрос или удобные дни для встречи"></textarea>
+          </div>
+          <button id="submit-btn" class="btn btn-primary btn-block" type="submit">Отправить сообщение</button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </section>
   </main>
@@ -158,8 +190,61 @@
         <p class="footer-brand">Татьяна Мельникова · Психологические консультации</p>
         <p class="footer-note">По всем вопросам и переносу записи: <a href="mailto:tatiana@melnikov.pl">tatiana@melnikov.pl</a></p>
       </div>
-      <p class="footer-copy">© 2026 K&amp;T Studio · melnikov.pl</p>
+      <p class="footer-copy">© 2026 K&amp;T Studio · psy.melnikov.pl</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      const form = document.getElementById("contact-form");
+      const btn = document.getElementById("submit-btn");
+      const status = document.getElementById("form-status");
+      if (!form || !btn || !status) return;
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const honey = form.querySelector('input[name="_honey"]');
+        if (honey && honey.value) return;
+
+        const payload = {
+          name: form.elements.name.value.trim(),
+          email: form.elements.email.value.trim(),
+          message: form.elements.message.value.trim(),
+          _subject: "Новое сообщение с сайта psy.melnikov.pl",
+          _template: "table",
+          _captcha: "false"
+        };
+
+        btn.disabled = true;
+        btn.textContent = "Отправляю...";
+        status.textContent = "";
+        status.className = "form-status";
+
+        try {
+          const response = await fetch("https://formsubmit.co/ajax/tatiana@melnikov.pl", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+          });
+          const data = await response.json().catch(function () { return {}; });
+          if (!response.ok || data.success === "false" || data.success === false) {
+            throw new Error(data.message || "send failed");
+          }
+          form.reset();
+          status.textContent = "Сообщение отправлено. Татьяна ответит вам на указанный email.";
+          status.className = "form-status is-success";
+        } catch (err) {
+          status.innerHTML = 'Не удалось отправить через форму. Напишите напрямую на <a href="mailto:tatiana@melnikov.pl">tatiana@melnikov.pl</a>.';
+          status.className = "form-status is-error";
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Отправить сообщение";
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
